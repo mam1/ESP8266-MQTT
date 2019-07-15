@@ -1,12 +1,14 @@
 PIN=7
-DELAY=600
-ABORT_DELAY=30000
+DELAY=60000
+ABORT_DELAY=5000
 HOSTNAME="MQTT-DHT22-dryer"
 TIMEOUT=100000    -- timeout to check the network status
 EXSENSOR1="tempumid.lua"    -- module to run
 MQTTSERVER="192.168.254.221"   -- mqtt broker address
+-- MQTTSERVER="192.168.254.22"   -- mqtt broker address
 MQTTPORT="1883"  -- mqtt broker port
 MQTTQOS="0" -- qos used
+NO_RETAIN="0"
 CNAME="shop/dryer" -- Client name 
 AMBIENT="258Thomas"  -- Ambient name
 TTOPIC     = AMBIENT.."/"..CNAME.."/temperature"  -- Temperature topic
