@@ -73,6 +73,13 @@ function do_mqtt_connect()
   	m:connect(MQTTSERVER, MQTTPORT, 0, post,handle_mqtt_error)
 end
 
+function send_temp()
+	if m:publish(TTOPIC, t, MQTTQOS, 0) then
+		print("successfull temperature publish")
+	end
+end
+
+
 function post()
 	print("MQTT broker connected")
 
@@ -84,13 +91,13 @@ function post()
 
 -- publish readings
 
-
-	if m:publish(TTOPIC, t, MQTTQOS, 0) then
-		print("successfull temperature publish")
-	end
 	if m:publish(HTOPIC, h, MQTTQOS, 0) then
 		print("successfull humidity publish")
 	end
+
+	local ttimer = tmr.create()
+	ttimer:register(1000, tmr.ALARM_SINGLE, send_temp) 
+	ttimer:start()
 
     m:close();
 
@@ -150,7 +157,7 @@ end
 
 
 -- **************************************************************** 
-
+print("waiting for launch timer")
 local htimer = tmr.create()
 	htimer:register(DELAY, tmr.ALARM_AUTO, do_mqtt_connect)
 	htimer:start()
