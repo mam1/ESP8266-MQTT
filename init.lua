@@ -7,7 +7,7 @@ function startup()
         print("Running")
         file.close("init.lua")
         -- the actual application is stored in 'application.lua'
-        dofile("t1.lua")
+        dofile("start_monitor.lua")
     end
 end
 
