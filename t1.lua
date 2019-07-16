@@ -79,18 +79,29 @@ function send_temp()
 	end
 end
 
-
-function post()
-	print("MQTT broker connected")
-
+function post_readings()
 -- read sensor
-	local t, h, topic
-
-	t, h = rdDHT22(PIN)
+    local t, h, topic
+    t, h = rdDHT22(PIN)
     print("  DHT22 read -> t "..t.."  h "..h)
+-- publish temperature
+    post(TTOPIC, t)
+-- publish humidity
+    post(HTOPIC, h)
+end
 
--- publish readings
+function pub_temp()
+    if m:publish(TTOPIC, t, MQTTQOS, 0) then
+        print("successfull temperature publish")
+    end
+end
 
+
+function post(topic,payload)
+-- connect to broker
+    do_mqtt_connect(pub_temp)
+
+-- MQTT publish
 	if m:publish(HTOPIC, h, MQTTQOS, 0) then
 		print("successfull humidity publish")
 	end
@@ -159,5 +170,5 @@ end
 -- **************************************************************** 
 print("waiting for launch timer")
 local htimer = tmr.create()
-	htimer:register(DELAY, tmr.ALARM_AUTO, do_mqtt_connect)
+	htimer:register(DELAY, tmr.ALARM_AUTO, post_readings)
 	htimer:start()
